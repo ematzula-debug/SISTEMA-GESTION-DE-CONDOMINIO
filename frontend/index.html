@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gestión de Condominio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EDEFEA;--panel:#FAFAF7;--ink:#1B2A29;--mute:#5E6D6B;--line:#D3D9D4;--brand:#1F6F66;--brand-ink:#fff;--ok:#2F7D4F;--warn:#A86B00;--bad:#B2402F;--info:#2D5E8C;--chip:#E3E8E3;color-scheme:light;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121A19;--panel:#1A2423;--ink:#E7EEEC;--mute:#97A8A5;--line:#2C3938;--brand:#5CC2B4;--brand-ink:#0B1413;--ok:#6FCB93;--warn:#E3A93A;--bad:#EE8171;--info:#7FB2E3;--chip:#243130;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121A19;--panel:#1A2423;--ink:#E7EEEC;--mute:#97A8A5;--line:#2C3938;--brand:#5CC2B4;--brand-ink:#0B1413;--ok:#6FCB93;--warn:#E3A93A;--bad:#EE8171;--info:#7FB2E3;--chip:#243130;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Schibsted Grotesk",system-ui,sans-serif}
+[hidden]{display:none!important}
+.wa{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:5;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:#25D366;color:#fff;text-decoration:none;box-shadow:0 0 0 6px rgba(37,211,102,.28),0 6px 18px rgba(0,0,0,.35);animation:wapulso 2.4s ease-out infinite;transition:transform .15s}
+.wa:hover{transform:scale(1.07)}
+.wa svg{width:34px;height:34px}
+.wa .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wa.off{opacity:.6;filter:grayscale(.5);animation:none}
+@keyframes wapulso{0%{box-shadow:0 0 0 0 rgba(37,211,102,.55),0 6px 18px rgba(0,0,0,.35)}70%{box-shadow:0 0 0 16px rgba(37,211,102,0),0 6px 18px rgba(0,0,0,.35)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0),0 6px 18px rgba(0,0,0,.35)}}
+@media (prefers-reduced-motion:reduce){.wa{animation:none}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:6;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;max-width:90vw;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+#gate{min-height:100vh;display:grid;place-items:center;padding:24px}
+.card{width:min(400px,100%);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:30px}
+.who{margin:22px 8px 0;padding-top:14px;border-top:1px solid var(--line)}
+.who span{display:block;font-size:13px;margin-bottom:4px}
+.who button{padding:6px 0;color:var(--bad)}
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+nav{padding:24px 16px;border-right:1px solid var(--line)}
+.logo{font-weight:800;font-size:19px;letter-spacing:-.02em;line-height:1.15;margin:0 8px 24px}
+.logo small{display:block;font-weight:500;font-size:12px;color:var(--mute);letter-spacing:0;margin-top:4px}
+nav button{display:block;width:100%;text-align:left;border:0;background:none;color:var(--ink);padding:9px 12px;border-radius:8px;font:inherit;cursor:pointer}
+nav button:hover{background:var(--chip)}
+nav button[aria-current="page"]{background:var(--brand);color:var(--brand-ink);font-weight:700}
+main{padding:28px 32px;min-width:0;max-width:1100px}
+h1{font-size:28px;letter-spacing:-.025em;margin:0 0 4px;font-weight:800}
+.sub{color:var(--mute);margin:0 0 22px}
+.big{background:var(--brand);color:var(--brand-ink);border-radius:14px;padding:24px 26px;margin-bottom:16px}
+.big b{display:block;font-size:46px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:22px}
+.stat{border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:14px 16px}
+.stat b{display:block;font-size:24px;font-weight:700}
+.stat span,.mute{color:var(--mute);font-size:13px}
+.bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+.bar input{flex:1;min-width:180px;width:auto}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:8px;padding:8px 14px;font:inherit;cursor:pointer;white-space:nowrap}
+.btn.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);font-weight:700}
+.btn.del{color:var(--bad)}
+.sm{padding:4px 10px;font-size:13px}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:500}
+tr:last-child td{border-bottom:0}
+td.act{text-align:right;white-space:nowrap}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:13px;font-weight:500;background:var(--chip)}
+.chip.ok{color:var(--ok)}.chip.warn{color:var(--warn)}.chip.bad{color:var(--bad)}.chip.info{color:var(--info)}
+.empty{padding:28px;text-align:center;color:var(--mute)}
+h2{font-size:17px;margin:24px 0 10px}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);padding:22px;width:min(460px,92vw)}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h3{margin:0 0 14px;font-size:19px}
+label{display:block;margin-bottom:12px;font-size:13px;color:var(--mute)}
+label input,label select,label textarea{margin-top:4px;color:var(--ink);font-size:15px}
+.row{display:flex;gap:10px;justify-content:flex-end;margin-top:6px}
+@media (max-width:720px){.app{grid-template-columns:1fr}nav{border-right:0;border-bottom:1px solid var(--line);padding:14px 12px;display:flex;gap:6px;overflow-x:auto;align-items:center}.logo{display:none}nav button{width:auto;white-space:nowrap}main{padding:20px 14px}.who{margin:0 0 0 8px;padding:0;border:0;display:flex;align-items:center;gap:8px;white-space:nowrap}.who span{margin:0}}
+</style>
+</head>
+<body>
+<div id="gate"></div>
+<div class="app" hidden>
+<nav id="nav" aria-label="Secciones"></nav>
+<main id="main"></main>
+</div>
+<a id="wa" class="wa" href="#" target="_blank" rel="noopener" title="Escribir al administrador por WhatsApp" aria-label="Escribir al administrador por WhatsApp" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6a9.4 9.4 0 0 0-8.1 14.2L2.6 21.4l4.7-1.2A9.4 9.4 0 1 0 12 2.6z" fill="none" stroke="#fff" stroke-width="1.9" stroke-linejoin="round"/><path fill="#fff" transform="translate(6.3 6.1) scale(.47)" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span id="wat" class="sr">Escribir al administrador</span></a>
+<div id="toast" class="toast" role="status" hidden></div>
+<dialog id="dlg"><form id="frm"></form></dialog>
+<script>
+/* ===== Conexión con el backend =====
+   API_URL vacío = el frontend lo sirve el mismo backend.
+   Si lo alojas aparte, escribe aquí la dirección, por ejemplo "http://localhost:8000". */
+var API_URL="";
+var db={},sesion=null,token=null,TK="condo_token";
+function guardarToken(t){try{t?sessionStorage.setItem(TK,t):sessionStorage.removeItem(TK)}catch(e){}}
+function leerToken(){try{return sessionStorage.getItem(TK)}catch(e){return null}}
+function msj(d){if(!d)return"";if(typeof d==="string")return d;return d.map(function(e){return(e.loc||[]).slice(-1)[0]+": "+e.msg}).join(". ")}
+async function http(metodo,ruta,cuerpo){
+ var r;
+ try{r=await fetch(API_URL+"/api/"+ruta,{method:metodo,headers:Object.assign({"Content-Type":"application/json"},token?{Authorization:"Bearer "+token}:{}),body:cuerpo?JSON.stringify(cuerpo):undefined})}
+ catch(e){throw new Error("No se pudo conectar con el servidor. ¿Está encendido el backend?")}
+ if(r.status===401&&ruta!=="auth/login"){salir();throw new Error("Tu sesión venció. Inicia sesión de nuevo.")}
+ if(r.status===204)return null;
+ var d=await r.json().catch(function(){return{}});
+ if(!r.ok)throw new Error(msj(d.detail)||"Error "+r.status);
+ return d}
+var api={
+ list:function(m){return http("GET",m)},
+ create:function(m,r){return http("POST",m,r)},
+ update:function(m,id,r){return http("PUT",m+"/"+id,r)},
+ remove:function(m,id){return http("DELETE",m+"/"+id)}};
+
+/* ===== Permisos por rol (el backend los vuelve a validar) ===== */
+var ORDEN=["usuarios","propietarios","viviendas","pagos","visitas","mantenimiento","reportes"];
+var ROL_MODS={Administrador:ORDEN,Guardia:["viviendas","visitas","mantenimiento"],Propietario:["viviendas","pagos","visitas","mantenimiento","reportes"],Inquilino:["viviendas","pagos","visitas","mantenimiento","reportes"]};
+var ESCRIBE={Administrador:"*",Guardia:["visitas","mantenimiento"]};
+function mods(){return ROL_MODS[sesion.rol]||[]}
+function esResidente(){return sesion.rol==="Propietario"||sesion.rol==="Inquilino"}
+function puedeEditar(k){var e=ESCRIBE[sesion.rol];return e==="*"||(e||[]).indexOf(k)>-1}
+function puedeCrear(k){return puedeEditar(k)||(k==="mantenimiento"&&esResidente()&&!!sesion.vivienda)}
+function salir(){sesion=null;token=null;guardarToken(null);db={};q="";shell()}
+
+/* ===== Definición de módulos: [clave, etiqueta, tipo] ===== */
+var V="@viviendas";
+var M={
+usuarios:{t:"Usuarios",n:"usuario",f:[["nombre","Nombre","text"],["rol","Rol",["Administrador","Propietario","Inquilino","Guardia"]],["correo","Correo","email"],["telefono","Teléfono","tel"],["vivienda","Vivienda",V]]},
+propietarios:{t:"Propietarios",n:"propietario",f:[["nombre","Nombre","text"],["documento","Documento (DPI)","text"],["telefono","Teléfono","tel"],["correo","Correo","email"],["vivienda","Vivienda",V]]},
+viviendas:{t:"Viviendas",n:"vivienda",f:[["codigo","Código","text"],["bloque","Torre o sector","text"],["tipo","Tipo",["Apartamento","Casa"]],["area","Área (m²)","number"],["estado","Estado",["Ocupada","Disponible"]]]},
+pagos:{t:"Pagos",n:"pago",f:[["vivienda","Vivienda",V],["concepto","Concepto",["Cuota de mantenimiento","Cuota extraordinaria","Multa"]],["monto","Monto (Q)","number"],["mes","Mes","month"],["estado","Estado",["Pendiente","Pagado","Vencido"]]]},
+visitas:{t:"Visitas",n:"visita",f:[["visitante","Visitante","text"],["documento","Documento","text"],["vivienda","Vivienda",V],["motivo","Motivo","text"],["entrada","Entrada","datetime-local"],["estado","Estado",["Dentro","Salió"]]]},
+mantenimiento:{t:"Mantenimiento",n:"solicitud",f:[["titulo","Título","text"],["vivienda","Ubicación","text"],["prioridad","Prioridad",["Baja","Media","Alta"]],["estado","Estado",["Abierta","En proceso","Resuelta"]],["descripcion","Descripción","textarea"]]}};
+var TONE={Pagado:"ok",Pendiente:"warn",Vencido:"bad",Dentro:"info","Salió":"",Alta:"bad",Media:"warn",Baja:"",Abierta:"bad","En proceso":"warn",Resuelta:"ok",Ocupada:"ok",Disponible:"info"};
+var cur="usuarios",q="",editing=null;
+
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function money(n){return "Q"+Number(n).toLocaleString("es-GT",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function show(f,v){
+ if(v===""||v==null)return '<span class="mute">—</span>';
+ if(f[0]==="monto")return money(v);
+ if(f[0]==="entrada")return esc(String(v).replace("T"," "));
+ if(f[1]==="Estado"||f[1]==="Prioridad")return '<span class="chip '+(TONE[v]||"")+'">'+esc(v)+"</span>";
+ return esc(v)}
+
+/* ===== Navegación ===== */
+function renderNav(){
+ var items=ORDEN.filter(function(k){return mods().indexOf(k)>-1}).map(function(k){return[k,k==="reportes"?"Reportes":M[k].t]});
+ document.getElementById("nav").innerHTML='<div class="logo">Módulos<small>Gestión de condominio</small></div>'+items.map(function(i){return '<button data-go="'+i[0]+'"'+(i[0]===cur?' aria-current="page"':"")+">"+i[1]+"</button>"}).join("")+'<div class="who"><span class="mute">'+esc(sesion.nombre)+" · "+esc(sesion.rol)+'</span><button data-act="logout">Cerrar sesión</button></div>'}
+function go(k){cur=k;q="";try{history.replaceState(null,"","#"+k)}catch(e){}renderNav();render()}
+
+/* Muestra el login o el sistema según haya sesión */
+function shell(){var on=!!sesion,g=document.getElementById("gate");g.hidden=on;document.querySelector(".app").hidden=!on;if(on){renderNav();render()}else g.innerHTML=loginView();mostrarWA()}
+
+/* ===== Vistas ===== */
+function aviso(t,mal){return '<div class="empty"'+(mal?' style="color:var(--bad)"':"")+">"+esc(t)+"</div>"}
+function cols(k){return M[k].f.filter(function(c){return c[2]!=="textarea"})}
+async function render(){
+ var el=document.getElementById("main"),k=cur;
+ if(k==="reportes"){
+  el.innerHTML='<h1>Reportes</h1><p class="sub">'+(esResidente()?"Tus cobros, visitas y solicitudes.":"Cobros, visitas y solicitudes del condominio.")+'</p><div id="rep">'+aviso("Cargando…")+"</div>";
+  try{var d=await http("GET","reportes");if(cur===k)document.getElementById("rep").innerHTML=reportes(d)}
+  catch(e){if(cur===k&&sesion)document.getElementById("rep").innerHTML=aviso(e.message,1)}
+  return}
+ var m=M[k],ed=puedeEditar(k);
+ el.innerHTML='<h1>'+m.t+'</h1><p class="sub">'+(ed?"Registra, busca y actualiza "+m.t.toLowerCase()+" del condominio.":"Consulta "+m.t.toLowerCase()+(esResidente()?" de tu vivienda":"")+".")+'</p><div class="bar"><input id="q" type="search" placeholder="Buscar en '+m.t.toLowerCase()+'" aria-label="Buscar">'+(puedeCrear(k)?'<button class="btn pri" data-act="new">Agregar '+m.n+"</button>":"")+'</div><div class="wrap"><table><thead><tr>'+cols(k).map(function(c){return "<th>"+c[1]+"</th>"}).join("")+(ed?"<th></th>":"")+'</tr></thead><tbody id="rows"><tr><td class="empty" colspan="9">Cargando…</td></tr></tbody></table></div>';
+ try{db[k]=await api.list(k);if(cur===k)rows()}
+ catch(e){if(cur===k&&sesion)document.getElementById("rows").innerHTML='<tr><td class="empty" colspan="9" style="color:var(--bad)">'+esc(e.message)+"</td></tr>"}}
+function rows(){
+ var k=cur,t=q.toLowerCase(),ed=puedeEditar(k),list=(db[k]||[]).filter(function(r){return JSON.stringify(r).toLowerCase().indexOf(t)>-1});
+ document.getElementById("rows").innerHTML=list.length?list.map(function(r){return "<tr>"+cols(k).map(function(c){return "<td>"+show(c,r[c[0]])+"</td>"}).join("")+(ed?'<td class="act"><button class="btn sm" data-act="edit" data-id="'+r.id+'">Editar</button> <button class="btn sm del" data-act="del" data-id="'+r.id+'">Eliminar</button></td>':"")+"</tr>"}).join(""):'<tr><td class="empty" colspan="9">'+(t?"Ninguna coincidencia. Prueba con otra búsqueda.":"Aún no hay registros.")+"</td></tr>"}
+function tabla(tit,cab,f){return "<h2>"+tit+'</h2><div class="wrap"><table><thead><tr>'+cab.map(function(c){return "<th>"+c+"</th>"}).join("")+"</tr></thead><tbody>"+(f||'<tr><td class="empty">Sin datos todavía.</td></tr>')+"</tbody></table></div>"}
+function reportes(d){
+ function f(l,k,c,t){return l.map(function(x){return "<tr><td>"+esc(x[k])+"</td><td>"+x[c]+"</td>"+(t?"<td>"+money(x[t])+"</td>":"")+"</tr>"}).join("")}
+ function suma(l,c){return l.reduce(function(a,x){return a+x[c]},0)}
+ var ab=d.mantenimiento_por_estado.filter(function(x){return x.estado!=="Resuelta"});
+ return '<div class="big"><span>Por cobrar</span><b>'+money(suma(d.saldo_por_vivienda,"saldo"))+'</b><span>en '+suma(d.saldo_por_vivienda,"pagos")+' pago(s) pendientes o vencidos</span></div><div class="stats"><div class="stat"><b>'+suma(ab,"cantidad")+'</b><span>solicitudes sin resolver</span></div><div class="stat"><b>'+suma(d.visitas_por_vivienda,"visitas")+'</b><span>visitas registradas</span></div></div>'
+ +tabla("Pagos por estado",["Estado","Cantidad","Total"],f(d.pagos_por_estado,"estado","cantidad","total"))
+ +tabla("Saldo pendiente por vivienda",["Vivienda","Pagos","Saldo"],f(d.saldo_por_vivienda,"vivienda","pagos","saldo"))
+ +tabla("Visitas por vivienda",["Vivienda","Visitas"],f(d.visitas_por_vivienda,"vivienda","visitas"))
+ +tabla("Solicitudes de mantenimiento",["Estado","Cantidad"],f(d.mantenimiento_por_estado,"estado","cantidad"))}
+function loginView(){
+ return '<div class="card"><div class="logo" style="margin:0 0 22px">Gestión de Condominio<small>Inicia sesión para continuar</small></div><form id="lg"><label>Correo<input id="lg_c" type="email" required autocomplete="username"></label><label>Contraseña<input id="lg_p" type="password" required autocomplete="current-password"></label><p id="lg_e" class="mute" role="alert" style="color:var(--bad)"></p><button class="btn pri" type="submit" style="width:100%">Iniciar sesión</button></form></div>'}
+
+/* ===== Formulario ===== */
+var CAMPOS=[];
+function field(f,v){
+ var id="f_"+f[0],t=f[2],o="";
+ if(t==="textarea")o='<textarea id="'+id+'" rows="3">'+esc(v)+"</textarea>";
+ else if(Array.isArray(t)||t===V){var libre=cur==="usuarios"||cur==="propietarios",ops=t===V?(libre?[""]:[]).concat((db.viviendas||[]).map(function(x){return x.codigo})):t;o='<select id="'+id+'">'+ops.map(function(x){return '<option value="'+esc(x)+'"'+(x===v?" selected":"")+">"+(x===""?"Sin vivienda":esc(x))+"</option>"}).join("")+"</select>"}
+ else o='<input id="'+id+'" type="'+t+'" value="'+esc(v)+'"'+(t==="number"?' min="0" step="any"':"")+(t==="password"?' minlength="8" autocomplete="new-password"'+(editing?' placeholder="Sin cambios"':" required"):"")+(f===M[cur].f[0]?" required":"")+">";
+ return "<label>"+f[1]+o+"</label>"}
+async function open(id){
+ editing=id;var m=M[cur];
+ if(!db.viviendas){try{db.viviendas=await api.list("viviendas")}catch(e){db.viviendas=[]}}
+ var r=id?(db[cur]||[]).find(function(x){return x.id===id}):{};
+ if(!id&&cur==="visitas")r.entrada=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16);
+ CAMPOS=m.f.concat(cur==="usuarios"?[["password","Contraseña","password"]]:[]).filter(function(f){return !(esResidente()&&cur==="mantenimiento"&&(f[0]==="estado"||f[0]==="vivienda"))});
+ document.getElementById("frm").innerHTML="<h3>"+(id?"Editar ":"Agregar ")+m.n+"</h3>"+CAMPOS.map(function(f){return field(f,r[f[0]])}).join("")+'<p id="ferr" role="alert" style="color:var(--bad);margin:0 0 10px"></p><div class="row"><button type="button" class="btn" data-act="cancel">Cancelar</button><button class="btn pri" type="submit">Guardar cambios</button></div>';
+ document.getElementById("dlg").showModal()}
+
+/* ===== WhatsApp: inquilinos, propietarios y guardias escriben al administrador ===== */
+var WA=null,toastT;
+function avisoToast(t){var el=document.getElementById("toast");el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},6000)}
+function waUrl(){
+ var t="Hola, soy "+sesion.nombre+" ("+sesion.rol+(sesion.vivienda?", vivienda "+sesion.vivienda:"")+"). Necesito ayuda con: ",txt=encodeURIComponent(t),movil=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+ return movil?"https://wa.me/"+WA.telefono+"?text="+txt:"https://web.whatsapp.com/send?phone="+WA.telefono+"&text="+txt}
+function estadoWA(b,w,txt,off){w.textContent=txt;b.title=txt;b.setAttribute("aria-label",txt);b.classList.toggle("off",off)}
+function mostrarWA(){
+ var b=document.getElementById("wa"),w=document.getElementById("wat"),ok=!!sesion&&(esResidente()||sesion.rol==="Guardia");
+ b.hidden=!ok;b.setAttribute("href","#");WA=null;
+ estadoWA(b,w,"Escribir al administrador por WhatsApp",false);
+ if(!ok)return;
+ http("GET","contacto").then(function(d){
+  WA=d;
+  if(d.telefono)b.href=waUrl();
+  else estadoWA(b,w,"Sin número de WhatsApp registrado",true)
+ }).catch(function(e){WA={telefono:"",error:e.message};estadoWA(b,w,"WhatsApp no disponible",true)})}
+document.addEventListener("click",function(e){
+ if(!e.target.closest("#wa"))return;
+ if(WA&&WA.telefono)return; /* enlace normal: abre WhatsApp */
+ e.preventDefault();
+ avisoToast(!WA?"Cargando el número… intenta de nuevo en un momento.":WA.error?"No se pudo obtener el número: "+WA.error:"El administrador aún no registró su número de WhatsApp. Debe agregarlo en Usuarios, en el campo Teléfono.")});
+
+/* ===== Eventos ===== */
+document.addEventListener("click",async function(e){
+ var b=e.target.closest("button");if(!b)return;
+ if(b.dataset.go)return go(b.dataset.go);
+ var a=b.dataset.act;
+ if(a==="new")open(null);
+ if(a==="edit")open(b.dataset.id);
+ if(a==="cancel")document.getElementById("dlg").close();
+ if(a==="logout")salir();
+ if(a==="del"){
+  if(!b.dataset.armed){b.dataset.armed=1;b.textContent="¿Confirmar?";setTimeout(function(){if(b.isConnected){delete b.dataset.armed;b.textContent="Eliminar"}},3000);return}
+  try{await api.remove(cur,b.dataset.id);db[cur]=await api.list(cur);rows()}catch(err){alert(err.message)}}});
+document.addEventListener("input",function(e){if(e.target.id==="q"){q=e.target.value;rows()}});
+document.getElementById("frm").addEventListener("submit",async function(e){
+ e.preventDefault();var r={};
+ CAMPOS.forEach(function(f){var v=document.getElementById("f_"+f[0]).value;r[f[0]]=f[2]==="number"&&v!==""?Number(v):v});
+ try{if(editing)await api.update(cur,editing,r);else await api.create(cur,r);
+  db[cur]=await api.list(cur);document.getElementById("dlg").close();rows()}
+ catch(err){document.getElementById("ferr").textContent=err.message}});
+document.addEventListener("submit",async function(e){
+ if(e.target.id!=="lg")return;e.preventDefault();
+ var er=document.getElementById("lg_e"),btn=e.target.querySelector("button");er.textContent="";btn.disabled=true;
+ try{var d=await http("POST","auth/login",{correo:document.getElementById("lg_c").value.trim(),password:document.getElementById("lg_p").value});
+  token=d.token;guardarToken(token);sesion=d.usuario;cur=mods()[0];shell()}
+ catch(err){er.textContent=err.message;btn.disabled=false}});
+
+/* ===== Inicio: recupera la sesión si el token sigue vigente ===== */
+(async function(){
+ token=leerToken();
+ if(token){try{sesion=await http("GET","auth/me");var h=location.hash.replace("#","");cur=mods().indexOf(h)>-1?h:mods()[0]}catch(e){token=null;guardarToken(null)}}
+ shell()})();
+</script>
+</body>
+</html>
