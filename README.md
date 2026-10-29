@@ -56,3 +56,23 @@ El backend sirve también el frontend, así que en Render se crea **un solo serv
 5. Abre la dirección `https://....onrender.com` e inicia sesión como administrador.
 
 Si no puedes correr `seed.py`, agrega en Render la variable `ADMIN_PASSWORD` (mínimo 8 caracteres): al arrancar crea el administrador si todavía no existe.
+
+## Instalar como aplicación (celular y computadora)
+El sistema es una app web instalable (PWA). No requiere tiendas de aplicaciones. Funciona con la dirección de Render (HTTPS) o con `localhost`.
+
+- **Android (Chrome):** menú de tres puntos, luego **Instalar app** o **Agregar a la pantalla principal**.
+- **iPhone (Safari):** botón Compartir, luego **Agregar a la pantalla de inicio**.
+- **Windows o Mac (Chrome o Edge):** ícono de instalar en la barra de direcciones, o menú, luego **Instalar Gestión de Condominio**.
+
+Los datos siempre se consultan en línea: sin internet se abre la pantalla, pero no se pueden ver ni guardar registros.
+
+## App de escritorio (Windows) y APK de Android
+Ambas son envolturas de la misma web publicada en Render, así que necesitan internet y siempre muestran la versión más reciente.
+
+**Escritorio (carpeta `desktop/`):**
+1. Instala Node.js (versión LTS) desde nodejs.org.
+2. Abre `desktop/config.json` y escribe la dirección real de tu servicio en Render.
+3. En la terminal: `cd desktop`, luego `npm install --save-dev electron electron-builder`.
+4. Prueba con `npm start`. Para crear el instalador: `npm run build`. Queda en `desktop/dist/`.
+
+**Android (APK):** se genera en pwabuilder.com con la dirección de Render (Package for stores, Android, llave de firma *New*). Para quitar la barra de direcciones, guarda el `assetlinks.json` que entrega PWABuilder en `frontend/.well-known/assetlinks.json` y publica los cambios.

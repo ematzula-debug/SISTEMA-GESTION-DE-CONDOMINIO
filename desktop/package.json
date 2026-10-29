@@ -1,0 +1,19 @@
+{
+  "name": "condominio-escritorio",
+  "version": "1.0.0",
+  "description": "Gestión de Condominio (aplicación de escritorio)",
+  "author": "Condominio",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.condominio.app",
+    "productName": "Gestión de Condominio",
+    "artifactName": "Condominio-Setup-${version}.${ext}",
+    "files": ["main.js", "config.json", "cargando.html", "sin-conexion.html", "build/icon.png", "package.json"],
+    "win": { "target": ["nsis"], "icon": "build/icon.png" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true }
+  }
+}

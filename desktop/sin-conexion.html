@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Sin conexión</title>
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#121A19;color:#E7EEEC;font:16px/1.5 system-ui,sans-serif;text-align:center}
+p{color:#97A8A5;margin:6px 0 18px}
+button{background:#5CC2B4;color:#0B1413;border:0;border-radius:8px;padding:10px 22px;font:inherit;font-weight:700;cursor:pointer}
+</style></head><body><div><b>No se pudo conectar con el sistema</b><p>Revisa tu conexión a internet y vuelve a intentarlo.</p>
+<button id="r">Reintentar</button></div>
+<script>document.getElementById("r").onclick=function(){var u=new URLSearchParams(location.search).get("u");if(u)location.href=u}</script>
+</body></html>

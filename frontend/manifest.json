@@ -1,0 +1,17 @@
+{
+  "name": "Gestión de Condominio",
+  "short_name": "Condominio",
+  "description": "Administración del condominio: pagos, visitas y mantenimiento.",
+  "id": "/",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#121A19",
+  "theme_color": "#1F6F66",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
